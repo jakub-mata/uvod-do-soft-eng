@@ -1,0 +1,59 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+class Gardener {
+  - ownerId
+  - name
+  - pushNotificationsEnabled
+  - quietHoursStart
+  - quietHoursEnd
+}
+
+class Plant {
+  - plantId
+  - nickname
+  - physicalTraits
+  - size
+  - weight
+  - dateAdded
+}
+
+class PlantSpecies {
+  - speciesId
+  - scientificName
+  - commonName
+  - baseSunlight
+  - baseWaterFrequency
+  - baseNPKLevels
+  - optimalHumidity
+}
+
+class CareProfile {
+  - profileId
+  - customizedSunlight
+  - customizedWaterFreq
+  - customizedNPK
+  - environmentalConstraints
+}
+
+class WateringLog {
+  - logId
+  - timestamp
+  - type 
+}
+
+class Reminder {
+  - reminderId
+  - scheduledTime
+  - status
+  - snoozeDuration
+}
+
+Gardener "1" -- "0..*" Plant : owns >
+Plant "0..*" -- "1" PlantSpecies : belongs to >
+Plant "1" -- "1" CareProfile : possesses >
+Plant "1" -- "0..*" WateringLog : maintains >
+Plant "1" -- "0..*" Reminder : triggers >
+
+@enduml
