@@ -1,0 +1,24 @@
+@startuml
+left to right direction
+actor "Gardener" as AC_G
+
+rectangle "HappyPlant - Plant Care Management" {
+    usecase "Generate Care Profile" as UC_GCP
+    usecase "Query Botanical Database" as UC_QBD
+    usecase "Search by Physical Traits" as UC_SPT
+    usecase "Identify Plant via Photo (ML)" as UC_IPP
+    usecase "Apply Environmental Constraints" as UC_AEC
+}
+
+' Querying the database remains the core inclusion for generating a profile
+UC_GCP .r.> UC_QBD : <<include>>
+
+' Alternative flows for finding the plant or adjusting the profile
+UC_SPT .u.> UC_GCP : <<extend>>
+UC_IPP .u.> UC_GCP : <<extend>>
+UC_AEC .u.> UC_GCP : <<extend>>
+
+' The actor initiates the primary profile generation process
+AC_G --> UC_GCP
+
+@enduml
