@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+actor "Gardener" as AC_G
+
+rectangle "HappyPlant - Plant Care Management" {
+    usecase "Add new plant to a shared environment" as UC_ANP
+    usecase "Assign responsible member" as UC_ARM
+    usecase "Identify plant manually" as UC_IPM
+    usecase "Identify Plant via Photo" as UC_IPP
+    usecase "Connect a measuring device" as UC_CMD
+}
+
+' Assigning responsible member
+UC_ANP .r.> UC_ARM : <<include>>
+
+' Alternative flows for finding the plants type
+UC_IPM .u.> UC_ANP : <<extend>>
+UC_IPP .u.> UC_ANP : <<extend>>
+
+' Connecting a mesuring device
+UC_CMD .u.> UC_ANP : <<extend>>
+
+' The actor initiates the adding operation
+AC_G --> UC_ANP
+
+@enduml

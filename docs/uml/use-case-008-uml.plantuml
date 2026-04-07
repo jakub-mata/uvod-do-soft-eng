@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+actor "Gardener" as AC_G
+
+rectangle "HappyPlant - Plant Care Management" {
+    usecase "Shift responsibility for a plant" as UC_ANP
+    usecase "Assign responsible person" as UC_ARM
+    usecase "Notify the new responsible person" as UC_IPM
+    usecase "Select plants to reassign" as UC_SPR
+
+}
+
+' Assigning new responsible member
+UC_ANP .r.> UC_ARM : <<include>>
+
+' Notification of the new responsible person
+UC_IPM .u.> UC_ANP : <<extend>>
+
+' Selecting the group of plants
+UC_SPR .u.> UC_ANP :<<extend>>
+
+
+' The actor initiates the adding operation
+AC_G --> UC_ANP
+
+@enduml
