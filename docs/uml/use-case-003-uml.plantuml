@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+
+actor "Farmer" as AC_F
+
+rectangle "HappyPlant - Plant Care Management" {
+    usecase "Alert to Location" as UC_AL
+    usecase "Invoke Alert on Device" as UC_IAD
+    usecase "Cease Alert on Device" as UC_CAD
+    usecase "Automatic Cease on Timeout" as UC_ACT
+}
+
+' The Farmer starts the process
+AC_F --> UC_AL
+
+' Primary goal requires starting the hardware alert
+UC_AL ..> UC_IAD : <<include>>
+
+' Primary goal requires stopping the alert (manual end of flow)
+UC_AL ..> UC_CAD : <<include>>
+
+' The timeout is a shared service that also triggers the cease hardware command
+UC_ACT ..> UC_CAD : <<include>>
+
+' The timeout can take over if time has elapsed
+UC_ACT ..> UC_AL : <<extend>>
+
+@enduml

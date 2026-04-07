@@ -1,0 +1,35 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Gardener" as AC_G
+actor "HappyPlant Friend" as AC_F
+
+rectangle "HappyPlant - Social Features" {
+    usecase "Create Shared Garden" as UC_CSG
+    usecase "Add Plant to Garden" as UC_APG
+    usecase "Send Invitation Notification" as UC_SIN
+    usecase "Accept Invitation" as UC_AI
+    usecase "Decline Invitation" as UC_DI
+    usecase "Report Bug" as UC_RB
+}
+
+' The Gardener starts the process
+AC_G --> UC_CSG
+
+' Creation includes adding plants and sending invites
+UC_CSG ..> UC_APG : <<include>>
+UC_CSG ..> UC_SIN : <<include>>
+
+' Error handling
+UC_RB ..> UC_CSG : <<extend>>
+
+' The Friend interacts with the invitations
+AC_F --> UC_AI
+AC_F --> UC_DI
+
+' Accepting/Declining the invitation process 
+UC_AI ..> UC_SIN : <<extend>>
+UC_DI ..> UC_SIN : <<extend>>
+
+@enduml
