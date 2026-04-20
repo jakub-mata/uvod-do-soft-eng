@@ -9,7 +9,27 @@ class User {
   - quietHoursEnd
 }
 
-class Gardener { }
+class Gardener extends User { }
+
+class Helper extends User { }
+
+class Farmer extends User {
+  - companyName
+}
+
+' Device for monitoring plants
+class HappyPlantStem {
+  - plant
+  - user
+}
+
+class SharingGroup {
+  - name
+}
+
+class SharingGarden extends SharingGroup { }
+
+class Farm extends SharingGroup { }
 
 class Plant {
   - nickname
@@ -47,11 +67,21 @@ class Reminder {
   - snoozeDuration
 }
 
-Gardener -- User : inherits > 
-Gardener "1" -- "0..*" Plant : owns >
+'Users owning Stem devices
+Gardener "1" -- "1..*" HappyPlantStem : owns >
+Farmer "1" -- "0..*" HappyPlantStem : owns >
+
+'Group membership
+Gardener "1..*" -- "0..*" SharingGarden : isMemberOf >
+Helper "0..*" -- "1..*" SharingGarden : isMemberOf >
+Farmer "1..*" -- "1.." Farm : isMemberOf > 
+SharingGroup "0..1" -- "1..*" HappyPlantStem : contains >
+
+'Stem device and plant relationships
+HappyPlantStem "1" -- "0..1" Plant : assigned to >
 Plant "0..*" -- "1" PlantSpecies : belongs to >
 Plant "1" -- "1" CareProfile : possesses >
-Plant "1" -- "0..*" WateringLog : maintains >
-Plant "1" -- "0..*" Reminder : triggers >
+HappyPlantStem "1" -- "0..*" WateringLog : maintains >
+HappyPlantStem "1" -- "0..*" Reminder : triggers >
 
 @enduml
