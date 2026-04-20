@@ -1,0 +1,66 @@
+@startuml
+skinparam style strictuml
+skinparam ActivityBackgroundColor #E8F5E9
+skinparam ActivityBorderColor #2E7D32
+skinparam NoteBackgroundColor #FFFFFF
+
+start
+:Evaluate watering schedule based on species, environment, and last log;
+:Determine specific plant is due for watering;
+
+label Step3
+if (Do Not Disturb enabled? [Flow 3a]) then (yes)
+  :Queue notification;
+  :Deliver notification after quiet hours end;
+else (no)
+  :Send watering reminder notification to device;
+endif
+
+label Step4
+if (User interacts with notification?) then (Taps)
+  :Open app directly to "Needs Attention" dashboard;
+  :Display specific plant(s) requiring water and instructions;
+  
+  if (Choose Action) then (Physically water plant)
+    :Physically waters the plant;
+    
+    if (Selects "Mark as Watered"?) then (yes)
+      :Log watering event with current timestamp;
+      :Calculate and schedule next future reminder;
+      :Remove plant from "Needs Attention" dashboard;
+      stop
+    else (Forgets to mark [Flow 7a])
+      :Evaluate at next sensor/logic check;
+      if (System notices the watering? [Flow 7a.1a]) then (yes)
+        :Update plant as watered;
+        stop
+      else (no [Flow 7a.1b])
+        goto Step3
+      endif
+    endif
+    
+  elseif (Choose Action) then (Snooze [Flow 6a.a])
+    :Select "Snooze" option;
+    :Select snooze duration;
+    :Hide reminder and reschedule for selected time;
+    stop
+    
+  elseif (Choose Action) then (Nag Someone Else [Flow 6a.b])
+    :Select "Nag Someone Else" option;
+    :Select member from SharingGarden;
+    :Send notification to member;
+    goto Step3
+    
+  else (Mark Faulty Reminder [Flow 6b])
+    :Select "Mark Faulty Reminder";
+    :Select whether to send request to Customer Support;
+    stop
+  endif
+
+else (Ignores/Dismisses [Flow 4a])
+  :Wait 24 hours;
+  :Send "Overdue" warning notification;
+  goto Step4
+endif
+
+@enduml
