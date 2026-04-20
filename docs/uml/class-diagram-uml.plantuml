@@ -2,16 +2,16 @@
 hide circle
 skinparam classAttributeIconSize 0
 
-class Gardener {
-  - ownerId
+class User {
   - name
   - pushNotificationsEnabled
   - quietHoursStart
   - quietHoursEnd
 }
 
+class Gardener { }
+
 class Plant {
-  - plantId
   - nickname
   - physicalTraits
   - size
@@ -20,7 +20,6 @@ class Plant {
 }
 
 class PlantSpecies {
-  - speciesId
   - scientificName
   - commonName
   - baseSunlight
@@ -30,7 +29,6 @@ class PlantSpecies {
 }
 
 class CareProfile {
-  - profileId
   - customizedSunlight
   - customizedWaterFreq
   - customizedNPK
@@ -38,18 +36,18 @@ class CareProfile {
 }
 
 class WateringLog {
-  - logId
   - timestamp
-  - type 
+  - actor 
 }
 
 class Reminder {
-  - reminderId
   - scheduledTime
+  - plantFor
   - status
   - snoozeDuration
 }
 
+Gardener -- User : inherits > 
 Gardener "1" -- "0..*" Plant : owns >
 Plant "0..*" -- "1" PlantSpecies : belongs to >
 Plant "1" -- "1" CareProfile : possesses >
