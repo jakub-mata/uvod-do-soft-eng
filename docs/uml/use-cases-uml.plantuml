@@ -1,0 +1,119 @@
+@startuml
+left to right direction
+
+actor "Gardener" as AC_G
+actor "Farmer" as AC_F
+actor "HappyPlant Friend" as AC_HF
+
+rectangle "HappyPlant - Plant Care Management" {
+    usecase "Shift responsibility for a plant" as UC_ANP
+    usecase "Add new plant to a shared environment" as UC_ANPSE
+    usecase "Assign responsible member" as UC_ARM
+    usecase "Identify Plant via Photo" as UC_IPP
+    usecase "Connect a measuring device" as UC_CMD
+    usecase "Navigate to Plant" as UC_NP
+    usecase "Set Plant Location" as UC_SPL
+    usecase "Show Plant Details" as UC_SPD
+    usecase "Generate Care Profile" as UC_GCP
+    usecase "Search by Physical Traits" as UC_SPT
+    usecase "Process Watering Reminder" as UC_PWR
+    usecase "Mark Plant as Watered" as UC_MPW
+    usecase "Forward Reminder" as UC_FR
+    usecase "Alert to Location" as UC_AL
+}
+
+rectangle "HappyPlant - Social Features" {
+    usecase "Verify Delegated Care" as UC_VDC
+    usecase "Decline Care Task" as UC_DCT
+    usecase "Dispute Care Action" as UC_DCA
+    usecase "Create Shared Garden" as UC_CSG
+    usecase "Add Plant to Garden" as UC_APG
+    usecase "Accept Invitation" as UC_AI
+    usecase "Decline Invitation" as UC_DI
+}
+
+rectangle "HappyPlant - System Features" {
+    usecase "Report Bug" as UC_RB
+}
+
+' Marking the plant as watered is the standard required step
+UC_PWR .r.> UC_MPW : <<include>>
+
+' Alternative flows representing user choices during the reminder process
+UC_FR .u.> UC_PWR : <<extend>>
+
+' The actor initiates the interaction with the reminder
+AC_G --> UC_PWR
+
+'
+
+' Alternative flows for finding the plant or adjusting the profile
+UC_SPT .u.> UC_GCP : <<extend>>
+UC_IPP .u.> UC_GCP : <<extend>>
+
+' The actor initiates the primary profile generation process
+AC_G --> UC_GCP
+
+'
+
+' The Farmer starts the process
+AC_F --> UC_AL
+
+'
+
+' Alternative flows
+UC_SPL .u.> UC_NP : <<extend>>
+UC_SPD .d.> UC_NP : <<extend>>
+
+' The actor initiates the navigation process
+AC_G --> UC_NP
+
+'
+
+' The Gardener starts the process
+AC_G --> UC_CSG
+
+' Creation includes adding plants and sending invites
+UC_CSG ..> UC_APG : <<include>>
+
+' Error handling
+UC_RB ..> UC_CSG : <<extend>>
+
+' The Friend interacts with the invitations
+AC_HF --> UC_AI
+AC_HF --> UC_DI
+
+' Accepting/Declining the invitation process 
+UC_AI ..> UC_CSG : <<extend>>
+UC_DI ..> UC_CSG : <<extend>>
+
+'
+
+' Alternative flows
+UC_DCT .u.> UC_VDC : <<extend>>
+UC_DCA .d.> UC_VDC : <<extend>>
+
+' The caretaker performs the care and the owner verifies
+AC_HF --> UC_VDC
+AC_G --> UC_VDC
+
+'
+
+' Assigning responsible member
+UC_ANPSE .r.> UC_ARM : <<include>>
+
+' Alternative flows for finding the plants type
+UC_IPP .u.> UC_ANPSE : <<extend>>
+
+' Connecting a mesuring device
+UC_CMD .u.> UC_ANPSE : <<extend>>
+
+' The actor initiates the adding operation
+AC_G --> UC_ANPSE
+
+'
+
+' The actor initiates the adding operation
+AC_G --> UC_ANP
+
+@enduml
