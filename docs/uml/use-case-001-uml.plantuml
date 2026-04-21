@@ -5,18 +5,14 @@ actor "Gardener" as AC_G
 rectangle "HappyPlant - Plant Care Management" {
     usecase "Process Watering Reminder" as UC_PWR
     usecase "Mark Plant as Watered" as UC_MPW
-    usecase "Snooze Reminder" as UC_SR
-    usecase "Forward Reminder (Nag Someone Else)" as UC_FR
-    usecase "Mark Faulty Reminder" as UC_MFR
+    usecase "Forward Reminder" as UC_FR
 }
 
 ' Marking the plant as watered is the standard required step
 UC_PWR .r.> UC_MPW : <<include>>
 
 ' Alternative flows representing user choices during the reminder process
-UC_SR .u.> UC_PWR : <<extend>>
 UC_FR .u.> UC_PWR : <<extend>>
-UC_MFR .u.> UC_PWR : <<extend>>
 
 ' The actor initiates the interaction with the reminder
 AC_G --> UC_PWR

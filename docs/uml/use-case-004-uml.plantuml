@@ -4,19 +4,13 @@ actor "Gardener" as AC_G
 
 rectangle "HappyPlant - Plant Care Management" {
     usecase "Navigate to Plant" as UC_NP
-    usecase "Calculate Distance" as UC_CD
     usecase "Set Plant Location" as UC_SPL
-    usecase "Switch Target Plant" as UC_STP
-    usecase "Show Plant Details on Arrival" as UC_SPDA
+    usecase "Show Plant Details" as UC_SPD
 }
-
-' Calculating distance is a core inclusion for the navigation process
-UC_NP .r.> UC_CD : <<include>>
 
 ' Alternative flows
 UC_SPL .u.> UC_NP : <<extend>>
-UC_STP .u.> UC_NP : <<extend>>
-UC_SPDA .d.> UC_NP : <<extend>>
+UC_SPD .d.> UC_NP : <<extend>>
 
 ' The actor initiates the navigation process
 AC_G --> UC_NP

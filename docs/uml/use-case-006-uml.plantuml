@@ -1,25 +1,17 @@
 @startuml
 left to right direction
-actor "Gardener\n(Plant Owner)" as AC_G
-actor "Group Member\n(Caretaker)" as AC_GM
+actor "Gardener" as AC_G
+actor "HappyPlant Friend\n(Group Member)" as AC_GM
 
-rectangle "HappyPlant - Plant Care Management" {
+rectangle "HappyPlant - Social Features" {
     usecase "Verify Delegated Care" as UC_VDC
-    usecase "Log Care Action" as UC_LCA
-    usecase "Send Verification Notification" as UC_SVN
     usecase "Decline Care Task" as UC_DCT
     usecase "Dispute Care Action" as UC_DCA
-    usecase "Flag Sensor Discrepancy" as UC_FSD
 }
-
-' Core inclusions for the verification process
-UC_VDC .r.> UC_LCA : <<include>>
-UC_VDC .r.> UC_SVN : <<include>>
 
 ' Alternative flows
 UC_DCT .u.> UC_VDC : <<extend>>
 UC_DCA .d.> UC_VDC : <<extend>>
-UC_FSD .d.> UC_VDC : <<extend>>
 
 ' The caretaker performs the care and the owner verifies
 AC_GM --> UC_VDC

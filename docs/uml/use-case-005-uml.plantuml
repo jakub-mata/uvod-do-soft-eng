@@ -8,9 +8,11 @@ actor "HappyPlant Friend" as AC_F
 rectangle "HappyPlant - Social Features" {
     usecase "Create Shared Garden" as UC_CSG
     usecase "Add Plant to Garden" as UC_APG
-    usecase "Send Invitation Notification" as UC_SIN
     usecase "Accept Invitation" as UC_AI
     usecase "Decline Invitation" as UC_DI
+}
+
+rectangle "HappyPlant - System Features" {
     usecase "Report Bug" as UC_RB
 }
 
@@ -19,7 +21,6 @@ AC_G --> UC_CSG
 
 ' Creation includes adding plants and sending invites
 UC_CSG ..> UC_APG : <<include>>
-UC_CSG ..> UC_SIN : <<include>>
 
 ' Error handling
 UC_RB ..> UC_CSG : <<extend>>
@@ -29,7 +30,7 @@ AC_F --> UC_AI
 AC_F --> UC_DI
 
 ' Accepting/Declining the invitation process 
-UC_AI ..> UC_SIN : <<extend>>
-UC_DI ..> UC_SIN : <<extend>>
+UC_AI ..> UC_CSG : <<extend>>
+UC_DI ..> UC_CSG : <<extend>>
 
 @enduml
