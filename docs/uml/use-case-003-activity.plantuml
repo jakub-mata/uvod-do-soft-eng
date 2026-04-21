@@ -1,0 +1,36 @@
+@startuml
+skinparam style strictuml
+skinparam ActivityBackgroundColor #E8F5E9
+skinparam ActivityBorderColor #2E7D32
+skinparam NoteBackgroundColor #FFFFFF
+
+start
+:Farmer presses 'Alert to Location' option;
+:System invokes alert on device;
+:Device flashes and emits sound;
+:System informs user alert is on;
+
+label LocateDevice
+if (User locates device?) then (yes [Step 5])
+else (no [Flow 5a])
+  if (Adjustment type?) then (Increase Volume [5a.1a])
+    :User increases alert volume;
+  else (Increase Brightness [5a.1b])
+    :User increases light brightness;
+  endif
+endif
+
+label StopAlert
+if (User manually stopped the alert?) then (yes [Step 6])
+  :System tells device to cease alert;
+  :System informs user alert is off;
+else (no - Timeout [Flow 6a])
+  :System reaches predefined timeout limit;
+  :System commands device to stop;
+  :System informs user alert was terminated;
+endif
+
+:Device stops flashing and becomes silent;
+
+stop
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+skinparam style strictuml
+hide empty description
+
+state "Idle" as Idle
+state "Alerting" as Alerting
+state "Stopping" as Stopping
+
+[*] --> Idle
+Idle --> Alerting : 'Alert to Location'\npressed
+Alerting --> Alerting : User adjusts\nvol/brightness
+Alerting --> Stopping : User clicks 'Stop'
+Alerting --> Stopping : Timeout reached
+Stopping --> Idle : Device silent
+Idle --> [*] : Task complete
+
+@enduml
