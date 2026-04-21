@@ -1,0 +1,57 @@
+@startuml
+skinparam style strictuml
+skinparam ActivityBackgroundColor #E8F5E9
+skinparam ActivityBorderColor #2E7D32
+skinparam NoteBackgroundColor #FFFFFF
+
+start
+:Add new plant button tapped;
+:Open plant adding form;
+
+label Step3
+if (Knows plant type?) then (yes)
+  :Select plant type manually;
+else (no [Flow 3a])
+  :Take photo of plant;
+  
+  label IdentifyLoop
+  :System identifies plant type and suggests it;
+  if (User confirms identified type?) then (yes)
+    :Auto-fill plant information;
+  else (no [Flow 3a.3b])
+    if (Retry identification?) then (yes)
+      goto IdentifyLoop
+    else (cancel [Flow 3a.3b.1b])
+      :Return to manual type selection;
+      :User selects plant type manually;
+    endif
+  endif
+endif
+
+:Fill out additional plant information;
+
+label Step5
+if (Connect measuring device?) then (success)
+  :Device connected successfully;
+else (failure [Flow 5b])
+  if (Try another device?) then (yes [Flow 5b.1a])
+    goto Step5
+  else (skip [Flow 5b.1b])
+    :Skip device connection;
+  endif
+endif
+
+:Assign responsibility to shared garden member;
+
+label Step7
+if (Confirm adding operation?) then (yes)
+  :Save new plant to shared environment;
+  :Open shared environment screen with added plant;
+  :Send notification to assigned member;
+  stop
+else (cancel [Flow 7b])
+  :Open shared environment screen;
+  stop
+endif
+
+@enduml
