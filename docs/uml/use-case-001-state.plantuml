@@ -1,0 +1,29 @@
+@startuml
+hide empty description
+
+[*] --> Scheduled : Plant Added / Cycle Calculated
+
+Scheduled --> Notified : System time matches scheduled time
+Scheduled --> Queued : Time matches "Do Not Disturb" hours
+Queued --> Notified : Quiet hours end
+
+state Notified {
+  [*] --> PendingResponse
+}
+
+Notified --> Watered : User selects "Mark as Watered"
+Notified --> Snoozed : User selects "Snooze"
+Notified --> Forwarded : User selects "Nag Someone Else"
+Notified --> Faulty : User selects "Mark Faulty Reminder"
+
+PendingResponse --> Overdue : 24 hours pass without interaction
+Overdue --> Watered : User interacts & marks watered
+Overdue --> Snoozed : User interacts & snoozes
+
+Snoozed --> Notified : Snooze duration expires
+Forwarded --> Notified : Forwarded user receives notification
+
+Watered --> Scheduled : System calculates next watering date
+Faulty --> [*] : Awaits user/support intervention
+
+@enduml
