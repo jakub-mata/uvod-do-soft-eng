@@ -1,0 +1,30 @@
+@startuml
+hide empty description
+
+[*] --> PlantSelected : User selects plant from collection
+
+PlantSelected --> AwaitingLocation : Plant has no stored location [Flow 3a]
+PlantSelected --> AwaitingGPS : Plant has location / GPS unavailable [Flow 4a]
+PlantSelected --> Navigating : Plant has location / GPS available
+
+AwaitingLocation --> AwaitingGPS : User sets location / GPS unavailable [Flow 4a]
+AwaitingLocation --> Navigating : User sets location / GPS available
+
+AwaitingGPS --> Navigating : User enables location services
+
+state Navigating {
+  [*] --> UpdatingPosition
+  UpdatingPosition --> WeakSignal : GPS signal degrades [Flow 7a]
+  WeakSignal --> UpdatingPosition : GPS signal restored
+}
+
+Navigating --> PlantSelected : User selects different plant [Flow 7b]
+Navigating --> ProximityReached : Distance drops below threshold
+
+ProximityReached --> NeedsMoreDetails : User cannot locate exact plant [Flow 8a]
+NeedsMoreDetails --> Arrived : User finds plant after viewing details
+ProximityReached --> Arrived : User finds plant directly
+
+Arrived --> [*] : Plant detail/care page displayed
+
+@enduml

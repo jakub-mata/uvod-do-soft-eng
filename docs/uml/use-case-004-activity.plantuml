@@ -1,0 +1,61 @@
+@startuml
+skinparam style strictuml
+skinparam ActivityBackgroundColor #E8F5E9
+skinparam ActivityBorderColor #2E7D32
+skinparam NoteBackgroundColor #FFFFFF
+
+start
+:Open app and navigate to plant collection;
+:Select a specific plant to navigate to;
+
+label Step1
+if (Plant has a stored location? [Flow 3a]) then (yes)
+  :Retrieve stored location of selected plant;
+else (no)
+  :Inform user that no location is set for this plant;
+  :Prompt user to set location (manually on map or by standing next to plant);
+  :User sets the plant's location;
+  :System saves the plant's location;
+  :Retrieve stored location of selected plant;
+endif
+
+if (GPS / location services available? [Flow 4a]) then (no)
+  :Display warning: location services required for navigation;
+  :Prompt user to enable location services in device settings;
+  :User enables location services;
+else (yes)
+endif
+:Access user's current GPS position;
+:Calculate distance between user and plant;
+:Display calculated distance and directional indicator toward plant;
+
+label Step7
+if (GPS signal quality? [Flow 7a]) then (poor/intermittent)
+  :Display warning about reduced location accuracy;
+  :Show last known distance; update when signal improves;
+else (good)
+  :Update distance and direction in real-time;
+endif
+
+label Step8
+if (User selects a different plant? [Flow 7b]) then (yes)
+  :Recalculate distance and direction for newly selected plant;
+  goto Step1
+else (no)
+endif
+
+if (Distance below proximity threshold?) then (no)
+  goto Step7
+else (yes)
+endif
+
+if (User locates the exact plant? [Flow 8a]) then (no)
+  :Display additional details: nickname, photo, and location notes;
+else (yes)
+endif
+
+:Notify user: arrived at plant;
+:Display plant detail/care page;
+stop
+
+@enduml
