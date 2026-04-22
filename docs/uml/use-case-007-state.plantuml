@@ -1,0 +1,42 @@
+@startuml
+skinparam style strictuml
+hide empty description
+
+state "Idle" as Idle
+state "Adding Plant" as Adding
+state "Identifying Plant" as Identifying
+state "Configuring Plant" as Configuring
+state "Connecting Device" as Connecting
+state "Assigning Responsibility" as Assigning
+state "Saving" as Saving
+state "Completed" as Completed
+state "Cancelled" as Cancelled
+
+[*] --> Idle
+
+Idle --> Adding : 'Add new plant'\npressed
+
+Adding --> Identifying : Unknown plant type
+Adding --> Configuring : Plant type selected
+
+Identifying --> Identifying : Retry identification
+Identifying --> Configuring : Type confirmed
+Identifying --> Adding : Cancel identification
+
+Configuring --> Connecting : Info filled
+
+Connecting --> Connecting : Try another device
+Connecting --> Assigning : Device connected
+Connecting --> Assigning : Skip connection
+
+Assigning --> Saving : Confirm adding
+Assigning --> Cancelled : Cancel operation
+
+Saving --> Completed : Plant saved\n+ notification sent
+
+Completed --> Idle : Done
+Cancelled --> Idle : Return to shared view
+
+Idle --> [*]
+
+@enduml
